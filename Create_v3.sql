@@ -102,7 +102,7 @@ CREATE TABLE Angebot(
 	Erfasst_von        VARCHAR2(50)  NOT NULL,
 	Erfasst_am         TIMESTAMP(0)  NOT NULL,
 	
-	constraint erfasst_SK foreign key(Erfasst_von) REFERENCES Mitarbeiter(VollName)
+	constraint erfasst_SK2 foreign key(Erfasst_von) REFERENCES Mitarbeiter(VollName)
 	--SK auf PK zum mitarbeiter (PersonalNr)
 );
 
@@ -161,7 +161,7 @@ CREATE TABLE Beziehung_Vermittlung(
 	constraint mitfahrer_sk FOREIGN KEY(Mitfahrer) REFERENCES Kunde(KundenNr),
 	
 	
-	Fahrt_duerchgefuehrt BOOLEAN, --weis nicht wie genau
+	Fahrt_duerchgefuehrt NUMERIC, --weis nicht wie genau
 	GEBUEHR VARCHAR2(20),
 	Bezahlt_am TIMESTAMP(0),
 	Bezahlt_bei VARCHAR2(20),
