@@ -1,4 +1,4 @@
-insert into ort (name) Values ('Augsburg'); 
+insert into ort (name) Values ('Augsburg');
 insert into ort (name) Values ('Muenchen');
 insert into ort (name) Values ('Koeln');
 insert into ort (name) Values ('Bonn');
@@ -15,12 +15,12 @@ insert into ort (name) Values ('Stuttgart');
 insert into ort (name) Values ('Ulm');
 insert into ort (name) Values ('Mannheim');
 
-insert into Mitarbeiter Values (1717234, 'Hans Mueller', 'Clauzenfeld 17', '68162', 'Mannheim' , '0621/237641', 'Bueroangestelter' );
-insert into Mitarbeiter Values (1737255, 'Anna Borreda', 'Muehlenweg 7', '61557', 'Oftersheim', '06223/66786', 'Schichtleiterin' );
-insert into Mitarbeiter Values (1137327, 'Franz Hoerner', 'Geranienstrasse 7', '68133', 'Mannheim','0621/6652526', 'Bueroangestelter' );
+insert into Mitarbeiter Values (1717234, 'Hans',' Mueller', 'Clauzenfeld 17', '68162', 'Mannheim' , '0621/237641', 'Bueroangestelter' );
+insert into Mitarbeiter Values (1737255, 'Anna' ,'Borreda', 'Muehlenweg 7', '61557', 'Oftersheim', '06223/66786', 'Schichtleiterin' );
+insert into Mitarbeiter Values (1137327, 'Franz',' Hoerner', 'Geranienstrasse 7', '68133', 'Mannheim','0621/6652526', 'Bueroangestelter' );
 
 insert into kunde
-Values ( kundenseq.nextval ,'Hans' , 'Meier' , 'Muehlingsstr 13'  , '68145' , 'Niederhockenstadt', '06447/31445');   
+Values ( kundenseq.nextval ,'Hans' , 'Meier' , 'Muehlingsstr 13'  , '68145' , 'Niederhockenstadt', '06447/31445');
 insert into kunde
 Values (kundenseq.nextval,'Hubert' , 'Mahlrumpf' , 'Kirchweg 17' , '45889' , 'Kirchheim', '03445/5617');
 insert into kunde
@@ -28,11 +28,11 @@ Values (kundenseq.nextval,'Frauke' , 'Keller' , 'Schwedenkai 1' , '23435' , 'Kie
 insert into kunde
 Values (kundenseq.nextval,'Uli' , 'Knauf' , 'Hauptstr. 15' , '69411' , 'Wiesloch', '06222/62552');
 insert into kunde
-Values (kundenseq.nextval,'Fiederike' , 'Müller' , 'Speyererstr. 7' , '69133' , 'Heidelberg', '06221/988457');
+Values (kundenseq.nextval,'Fiederike' , 'Mueller' , 'Speyererstr. 7' , '69133' , 'Heidelberg', '06221/988457');
 insert into kunde
 Values (kundenseq.nextval,'Franz' , 'Fritz' , 'Walzwerkstr. 13' , '65123' , 'Worms', '06231/728282');
 insert into kunde
-Values (kundenseq.nextval,'Franziska' , 'Meier' , 'Muehlingsstr 13' , '68145' , 'Niederhockenstadt', '06447/31445'); 
+Values (kundenseq.nextval,'Franziska' , 'Meier' , 'Muehlingsstr 13' , '68145' , 'Niederhockenstadt', '06447/31445');
 insert into kunde
 Values (kundenseq.nextval,'Franz' , 'Muetzenmeier' , 'Hauptstr. 15' , '69411' , 'Wiesloch', '06222/67761');
 insert into kunde
@@ -42,70 +42,70 @@ Values (kundenseq.nextval,'Elisa' , 'Knuff' , 'Geranienstrasse 7' , '98445' , 'B
 insert into kunde
 Values (kundenseq.nextval,'Franz' , 'Bremkauf' , 'Knaufweg 15' , '98770' , 'Buxtehude', '01566/75917');
 
-insert into Auto Values ('Gruene Ford Transit',6,'DA - XL 9',1);
-insert into Auto Values ('Blauer VW Golf',5,'BOR - H 9987',2);
-insert into Auto Values ('Weisses Mercedes Kombi',5,'DA - MH 312',1);
-insert into Auto Values ('Blauer Renault Twingo',5,'KI - T 556 ',3);
-insert into Auto Values ('Schwarzer Porsche',5,'HD - JJ 119',4);
-insert into Auto Values ('Schwarzer Porsche',5,'HD - UT 86',5);
-insert into Auto Values ('Verrosteter Renault R4',5,'WO - KJ 907',6);
+insert into Auto Values ('Gruene Ford Transit',6,'DA - XL 9');
+insert into Auto Values ('Blauer VW Golf',5,'BOR - H 9987');
+insert into Auto Values ('Weisses Mercedes Kombi',5,'DA - MH 312');
+insert into Auto Values ('Blauer Renault Twingo',5,'KI - T 556 ');
+insert into Auto Values ('Schwarzer Porsche',5,'HD - JJ 119');
+insert into Auto Values ('Schwarzer Porsche',5,'HD - UT 86');
+insert into Auto Values ('Verrosteter Renault R4',5,'WO - KJ 907');
 
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze ,bemerkung ,Vermittlungsgebuehr,erfasst_von ,erfasst_am ) VALUES (1,Gesuchseq.nextval, 'Augsburg','Muenchen',
-(TIMESTAMP '5-5-15'),2,'Abhohlung am liebsten Augsburg Hbf','bezhalt','Franz Hoerner',(TIMESTAMP '2-5-15') );
+TO_DATE( '5-5-15', 'DD-MM-YY'),2,'Abhohlung am liebsten Augsburg Hbf','bezhalt',1137327,TO_DATE( '2-5-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (9,Gesuchseq.nextval, 'Mannheim','Dortmund',
-(TIMESTAMP '30-5-15'),1,'Franz Hoerner',(TIMESTAMP '27-5-15') );
+TO_DATE( '30-5-15', 'DD-MM-YY'),1,1137327,TO_DATE( '27-5-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (10,Gesuchseq.nextval, 'Koeln','Hannover',
-(TIMESTAMP '1-6-15'),2,'Hans Mueller',(TIMESTAMP '29-5-15') );
+TO_DATE( '1-6-15', 'DD-MM-YY'),2,1717234,TO_DATE( '29-5-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (8,Gesuchseq.nextval, 'Mannheim','Hannover',
-(TIMESTAMP '1-6-15'),1,'Hans Mueller',(TIMESTAMP '30-5-15') );
+TO_DATE( '1-6-15', 'DD-MM-YY'),1,1717234,TO_DATE( '30-5-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (11,Gesuchseq.nextval, 'Mannheim','Hannover',
-(TIMESTAMP '1-6-15'),1,'Hans Mueller',(TIMESTAMP '30-5-15') );
+TO_DATE( '1-6-15', 'DD-MM-YY'),1,1717234,TO_DATE( '30-5-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (8,Gesuchseq.nextval, 'Heidelberg','Frankfurt',
-(TIMESTAMP '4-6-15'),1,'Franz Hoerner',(TIMESTAMP '2-6-15') );
+TO_DATE( '4-6-15', 'DD-MM-YY'),1,1137327,TO_DATE( '2-6-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Abfahrt,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (10,Gesuchseq.nextval, 'Bremen','Kassel',
-(TIMESTAMP '19-6-15'),2,'Hans Mueller',(TIMESTAMP '10-6-15') );
+TO_DATE( '19-6-15', 'DD-MM-YY'),2,1717234,TO_DATE( '10-6-15', 'DD-MM-YY') );
 insert into Gesuch (suchender ,gesuchnr ,ort_start ,ort_ziel ,Fruehste_Startzeit,Spaeteste_Startzeit,
 gesuchte_plaetze,erfasst_von ,erfasst_am ) VALUES (3,Gesuchseq.nextval, 'Stuttgart','Ulm',
-(TIMESTAMP '23-6-15 12:00'),(TIMESTAMP '23-6-15 18:00'),2,'Hans Mueller',(TIMESTAMP '20-6-15') );
+TO_DATE( '23-6-15 12:00', 'DD-MM-YY HH24:MI'),TO_DATE( '23-6-15 18:00', 'DD-MM-YY HH24:MI'),2,1717234,TO_DATE( '20-6-15', 'DD-MM-YY') );
 
 
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Bemerkung,Erfasst_von,Erfasst_am) VALUES (1,Angebotseq.nextval,'Mannheim','Muenchen',(TIMESTAMP '5-5-15 8:00'),
-2, 'Mannheim, ADAC-Stand Planetarium','Abholung Augsburg Hbf ok!, ca. 11:00 Uhr','Hans Mueller', (TIMESTAMP '1-5-15'));
+Gebotene_Plaetze,Treffpunkt,Bemerkung,Erfasst_von,Erfasst_am) VALUES (1,Angebotseq.nextval,'Mannheim','Muenchen',TO_DATE( '5-5-15 8:00', 'DD-MM-YY HH24:MI'),
+2, 'Mannheim, ADAC-Stand Planetarium','Abholung Augsburg Hbf ok!, ca. 11:00 Uhr',1717234, TO_DATE( '1-5-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Fruehste_Startzeit,Spateste_Startzeit,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (2,Angebotseq.nextval,'Mannheim','Dortmund',(TIMESTAMP '29-5-15 12:00'),
-(TIMESTAMP '30-5-15 12:00'),2, 'Mannheim, Wasserturm','Franz Hoerner', (TIMESTAMP '15-5-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (2,Angebotseq.nextval,'Mannheim','Dortmund',TO_DATE( '29-5-15 12:00', 'DD-MM-YY HH24:MI'),
+TO_DATE( '30-5-15 12:00', 'DD-MM-YY HH24:MI'),2, 'Mannheim, Wasserturm',1137327, TO_DATE( '15-5-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Bemerkung,Erfasst_von,Erfasst_am) VALUES (1,Angebotseq.nextval,'Mannheim','Dortmund',(TIMESTAMP '30-5-15'),
-2, 'Mannheim, ADAC-Stand Planetarium','ausgemachte Abfahrtszeit 10:00 Uhr ','Franz Hoerner', (TIMESTAMP '19-5-15'));
+Gebotene_Plaetze,Treffpunkt,Bemerkung,Erfasst_von,Erfasst_am) VALUES (1,Angebotseq.nextval,'Mannheim','Dortmund',TO_DATE( '30-5-15', 'DD-MM-YY'),
+2, 'Mannheim, ADAC-Stand Planetarium','ausgemachte Abfahrtszeit 10:00 Uhr ',1137327, TO_DATE( '19-5-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Ort_ueber,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (3,Angebotseq.nextval,'Mannheim','Hannover','Koeln',(TIMESTAMP '1-6-15'),
-3, 'Mannheim, vor Haupteingang Rosengarten','Hans Mueller', (TIMESTAMP '29-5-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (3,Angebotseq.nextval,'Mannheim','Hannover','Koeln',TO_DATE( '1-6-15', 'DD-MM-YY'),
+3, 'Mannheim, vor Haupteingang Rosengarten',1717234, TO_DATE( '29-5-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (4,Angebotseq.nextval,'Mannheim','Hannover',(TIMESTAMP '1-6-15 10:30'),
-1, 'Mannheim, ADAC-Stand Planetarium','Hans Mueller', (TIMESTAMP '30-5-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (4,Angebotseq.nextval,'Mannheim','Hannover',TO_DATE( '1-6-15 10:30' ,'DD-MM-YY HH24:MI'),
+1, 'Mannheim, ADAC-Stand Planetarium',1717234, TO_DATE( '30-5-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (1,Angebotseq.nextval,'Dortmund','Mannheim',(TIMESTAMP '4-6-15 10:00'),
-3, 'Dortmund, Litfasssaeule am Haupteingang des Hauptbahnhofs','Hans Mueller', (TIMESTAMP '1-6-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (1,Angebotseq.nextval,'Dortmund','Mannheim',TO_DATE( '4-6-15 10:00', 'DD-MM-YY HH24:MI'),
+3, 'Dortmund, Litfasssaeule am Haupteingang des Hauptbahnhofs',1717234, TO_DATE( '1-6-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (3,Angebotseq.nextval,'Heidelberg','Kassel',(TIMESTAMP '4-6-15 17:00'),
-2, 'Heidelberg, Seiteneingang des Hauptbahnhofs','Hans Mueller', (TIMESTAMP '1-6-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (3,Angebotseq.nextval,'Heidelberg','Kassel',TO_DATE( '4-6-15 17:00', 'DD-MM-YY HH24:MI'),
+2, 'Heidelberg, Seiteneingang des Hauptbahnhofs',1717234, TO_DATE( '1-6-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (5,Angebotseq.nextval,'Mannheim','Dortmund',(TIMESTAMP '13-6-15 9:00'),
-2, 'Mannheim, vor Wasserturm','Franz Hoerner', (TIMESTAMP '9-6-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (5,Angebotseq.nextval,'Mannheim','Dortmund',TO_DATE( '13-6-15 9:00', 'DD-MM-YY HH24:MI'),
+2, 'Mannheim, vor Wasserturm',1137327, TO_DATE( '9-6-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (6,Angebotseq.nextval,'Bremen','Frankfurt',(TIMESTAMP '17-6-15 10:00'),
-2, 'Skulptur "Bremer Stadtmusikanten"','Franz Hoerner', (TIMESTAMP '14-6-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (6,Angebotseq.nextval,'Bremen','Frankfurt',TO_DATE( '17-6-15 10:00', 'DD-MM-YY HH24:MI'),
+2, 'Skulptur "Bremer Stadtmusikanten"',1137327, TO_DATE( '14-6-15', 'DD-MM-YY'));
 insert into Angebot (Bietender,AngebotNr,Ort_Start,Ort_Ziel,Abfahrt,
-Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (7,Angebotseq.nextval,'Hannover','Bremen',(TIMESTAMP '30-6-15 9:00'),
-1, 'Hannover, Linie 1, Fahrtrichtung Messe, Haltestelle Rotenbaumchaussee ','Hans Mueller', (TIMESTAMP '25-6-15'));
+Gebotene_Plaetze,Treffpunkt,Erfasst_von,Erfasst_am) VALUES (7,Angebotseq.nextval,'Hannover','Bremen',TO_DATE( '30-6-15 9:00', 'DD-MM-YY HH24:MI'),
+1, 'Hannover, Linie 1, Fahrtrichtung Messe, Haltestelle Rotenbaumchaussee ',1717234, TO_DATE( '25-6-15', 'DD-MM-YY'));
 
 insert into Beziehung_Kunde_Gesuch VALUES (1,7);
 insert into Beziehung_Kunde_Gesuch VALUES (2,9);
@@ -157,9 +157,9 @@ insert into Beziehung_Strecken VALUES (222, 'Nuernberg', 'Frankfurt');
 insert into Beziehung_Strecken VALUES (92, 'Stuttgart', 'Ulm');
 insert into Beziehung_Strecken VALUES (81, 'Ulm', 'Augsburg');
 
-INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am) 
-VALUES  (1,1,1,8,1,'bezahlt',(TIMESTAMP '4-5-15'),'Hans Mueller','Hans Mueller',(TIMESTAMP '2-5-15') );
-INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am) 
-VALUES  (3,2,1,9,0,'bezahlt',(TIMESTAMP '29-5-15'),'Hans Mueller','Franz Hoerner',(TIMESTAMP '27-5-15') );
-INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am) 
-VALUES  (4,3,3,10,0,'Hans Mueller',(TIMESTAMP '30-5-15') );
+INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am)
+VALUES  (1,1,1,8,1,'bezahlt',TO_DATE( '4-5-15', 'DD-MM-YY'),1717234,1717234,TO_DATE( '2-5-15', 'DD-MM-YY') );
+INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am)
+VALUES  (3,2,1,9,0,'bezahlt',TO_DATE( '29-5-15', 'DD-MM-YY'),1717234,1137327,TO_DATE( '27-5-15', 'DD-MM-YY') );
+INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,vermittelt_von,vermittelt_am)
+VALUES  (4,3,3,10,0,1717234,TO_DATE( '30-5-15', 'DD-MM-YY') );
