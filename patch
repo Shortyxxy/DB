@@ -1,0 +1,17 @@
+patch, ersetzen:
+
+
+(TIMESTAMP
+TO_TIMESTAMP(
+
+
+-15')
+-15', 'DD-MM-YY')
+
+
+:00')
+:00', 'DD-MM-YY HH24:MI')
+
+
+:30')
+:30' ,'DD-MM-YY HH24:MI')
