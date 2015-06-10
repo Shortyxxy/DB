@@ -1,0 +1,40 @@
+--SELECT Befehle für einzelne Tabellen:
+SELECT * FROM Mitarbeiter;
+SELECT * FROM Ort;
+SELECT * FROM Auto;
+SELECT * FROM Kunde;
+SELECT * FROM Gesuch;
+SELECT * FROM Angebot;
+SELECT * FROM Beziehung_Kunde_Gesuch;
+SELECT * FROM Beziehung_Kunde_Angebot;
+SELECT * FROM Beziehung_Strecken;
+SELECT * FROM Beziehung_Vermittlung;
+SELECT * FROM Beziehung_Auto_Kunde;
+
+--SELECT Namen Abfragen:--
+--Mit Wildcards
+SELECT Name FROM Kunde WHERE Name LIKE 'M%';
+ --Mit 1 Anfangsbuchstaben
+SELECT Name FROM Kunde WHERE REGEXP_LIKE(Name,'M');
+   --Mit mehreren Anfangsbuchstaben
+SELECT Name FROM Kunde WHERE REGEXP_LIKE(Name,'^[MK]');
+
+--SELECT COUNT Abfragen:--
+--Anzahl der Angebote
+SELECT Count(AngebotNr) "Anzahl der Angebote" FROM Angebot;
+ --Anzahl der Angebote
+SELECT Count(GesuchNr) "Anzahl der Gesuche" FROM Gesuch;
+
+--SELECT ORDER BY Abfragen:
+--Angebote aufsteigend nach Startort sortieren:
+SELECT * FROM Angebot ORDER BY Ort_Start ASC;
+--Angebote absteigend nach Startort sortieren:
+SELECT * FROM Angebot ORDER BY Ort_Start DESC;
+
+--SELECT Group By:
+SELECT Count(AngebotNr),Ort_Start FROM Angebot GROUP BY Ort_Start;
+SELECT Count(AngebotNr),Ort_Start FROM Angebot WHERE Ort_Start ='Mannheim';
+
+--SELECT Zeitvergleiche:
+SELECT * FROM Angebot WHERE Abfahrt > TO_DATE('01-06-15 10:30', 'DD-MM-YY HH24:MI');
+SELECT * FROM Angebot WHERE To_Char(Abfahrt,'HH24:MI') > '09:30';
