@@ -2,14 +2,16 @@ create sequence Mitarbeiterseq start with 1;
 
 CREATE TABLE Mitarbeiter(
 	PersonalNr NUMBER(10) ,
-	--Name VARCHAR2(20) NOT Null,
-	--Vorname VARCHAR2(20) NOT NULL,
-	VollName VARCHAR2 (50) CONSTRAINT mitPNR_PK PRIMARY KEY,
+	Name VARCHAR2(20) NOT Null,
+	Vorname VARCHAR2(20) NOT NULL,
 	Strasse VARCHAR2(20) NOT NUll,
 	PLZ VARCHAR2(5) NOT NULL,
 	Stadt VARCHAR2(20) NOT NULL,
 	Telefonnummer VARCHAR2(50) NOT NULL ,
   Position VARCHAR2(20) NOT NULL
+
+
+
 );
 
 
@@ -30,6 +32,7 @@ CREATE TABLE Kunde(
 	Strasse VARCHAR2(20),
 	PLZ VARCHAR2(5) NOT NULL,
 	Stadt VARCHAR2(20) NOT NULL,
+  Auto VARCHAR2 (20) CONSTRAINT AutoSK REFERENCES Auto(Kennzeichen), 
 	Telefonnummer VARCHAR2(50) NOT NULL
 
 );
@@ -39,9 +42,9 @@ CREATE TABLE Kunde(
 CREATE Table Auto(
 	Modell VARCHAR2(50),
 	Sitze NUMBER(2) NOT NULL,
-	Kennzeichen VARCHAR2(15) ,
-	Besitzer NUMBER(10), --CONSTRAINT ZugAuto_Kunde  REFERENCES Kunde(KundenNr)
-	constraint ZugAuto_Kunde FOREIGN KEY(Besitzer) REFERENCES Kunde(KundenNr)
+	Kennzeichen VARCHAR2(15) CONSTRAINT AutoPK PRIMARY KEY,
+	--Besitzer NUMBER(10), --CONSTRAINT ZugAuto_Kunde  REFERENCES Kunde(KundenNr)
+	--constraint ZugAuto_Kunde FOREIGN KEY(Besitzer) REFERENCES Kunde(KundenNr)
 	
 );
 
@@ -68,10 +71,10 @@ CREATE TABLE GESUCH(
 	Gesuchte_Plaetze   NUMBER(2)     NOT NULL,
 	Bemerkung          VARCHAR2(255)           ,
 	Vermittlungsgebuehr VARCHAR2 (20),
-	Erfasst_von        VARCHAR2(50)  NOT NULL,
+	Erfasst_von        NUMBER(10)  NOT NULL,
 	Erfasst_am         TIMESTAMP(0)  NOT NULL, 
 	
-	constraint erfasst_SK foreign key(Erfasst_von) REFERENCES Mitarbeiter(VollName)
+	constraint erfasst_SK foreign key(Erfasst_von) REFERENCES Mitarbeiter(PersonalNr)
 	  --SK auf PK zum mitarbeiter (PersonalNr)
 );
 
@@ -101,10 +104,10 @@ CREATE TABLE Angebot(
 	Gebotene_Plaetze   NUMBER(2)     NOT NULL,
 	Treffpunkt         VARCHAR2(255)  NOT NULL,
 	Bemerkung          VARCHAR2(255)          ,
-	Erfasst_von        VARCHAR2(50)  NOT NULL,
+	Erfasst_von        NUMBER(10)  NOT NULL,
 	Erfasst_am         TIMESTAMP(0)  NOT NULL,
 	
-	constraint erfasst_SK2 foreign key(Erfasst_von) REFERENCES Mitarbeiter(VollName)
+	constraint erfasst_SK2 foreign key(Erfasst_von) REFERENCES Mitarbeiter(PersonalNr)
 	--SK auf PK zum mitarbeiter (PersonalNr)
 );
 
@@ -172,3 +175,10 @@ CREATE TABLE Beziehung_Vermittlung(
 
 	
 );
+
+
+
+
+
+
+
