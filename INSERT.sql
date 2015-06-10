@@ -156,3 +156,10 @@ insert into Beziehung_Strecken VALUES (235, 'Nuernberg', 'Mannheim');
 insert into Beziehung_Strecken VALUES (222, 'Nuernberg', 'Frankfurt');
 insert into Beziehung_Strecken VALUES (92, 'Stuttgart', 'Ulm');
 insert into Beziehung_Strecken VALUES (81, 'Ulm', 'Augsburg');
+
+INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am) 
+VALUES  (1,1,1,8,1,'bezahlt',(TIMESTAMP '4-5-15'),'Hans Mueller','Hans Mueller',(TIMESTAMP '2-5-15') );
+INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am) 
+VALUES  (3,2,1,9,0,'bezahlt',(TIMESTAMP '29-5-15'),'Hans Mueller','Franz Hoerner',(TIMESTAMP '27-5-15') );
+INSERT INTO Beziehung_Vermittlung (AngebotNr,GesuchNr,Fahrer,Mitfahrer,Fahrt_duerchgefuehrt,GEBUEHR,Bezahlt_am,Bezahlt_bei,vermittelt_von,vermittelt_am) 
+VALUES  (4,3,3,10,0,'Hans Mueller',(TIMESTAMP '30-5-15') );
