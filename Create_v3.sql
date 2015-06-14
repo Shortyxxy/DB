@@ -1,4 +1,6 @@
-create sequence Mitarbeiterseq start with 1;
+--CREATE SCRIPT:
+
+Create Sequence Mitarbeiterseq start with 1;
 
 CREATE TABLE Mitarbeiter(
 	PersonalNr NUMBER(10)constraint Mitarbeiter_Pk PRIMARY KEY ,
@@ -9,9 +11,6 @@ CREATE TABLE Mitarbeiter(
 	Stadt VARCHAR2(20) NOT NULL,
 	Telefonnummer VARCHAR2(50) NOT NULL ,
   Position VARCHAR2(20) NOT NULL
-
-
-
 );
 
 
@@ -22,13 +21,13 @@ CREATE TABLE Ort(
 );
 
 
+
 CREATE Table Auto(
 	Modell VARCHAR2(50),
 	Sitze NUMBER(2) NOT NULL,
 	Kennzeichen VARCHAR2(15) CONSTRAINT AutoPK PRIMARY KEY
 	--Besitzer NUMBER(10), --CONSTRAINT ZugAuto_Kunde  REFERENCES Kunde(KundenNr)
 	--constraint ZugAuto_Kunde FOREIGN KEY(Besitzer) REFERENCES Kunde(KundenNr)
-
 );
 
 
@@ -43,8 +42,8 @@ CREATE TABLE Kunde(
 	PLZ VARCHAR2(5) NOT NULL,
 	Stadt VARCHAR2(20) NOT NULL,
 	Telefonnummer VARCHAR2(50) NOT NULL
-
 );
+
 
 
 create sequence Gesuchseq start with 1;
@@ -54,7 +53,6 @@ CREATE TABLE GESUCH(
 
 --	constraint Gesuch_Kunde FOREIGN KEY(Suchender) REFERENCES Kunde(KundenNr),
 
-
 	GesuchNr NUMBER(10) CONSTRAINT GesuchNR_PK PRIMARY KEY,
 
 	Ort_Start VARCHAR2(20) constraint gesuch_start_ortSK REFERENCES Ort(name),
@@ -62,14 +60,14 @@ CREATE TABLE GESUCH(
 
 --	Constraint angebot_start_ortSK FOREIGN KEY(Ort_Start,Ort_Ziel) REFERENCES Ort(Name),
 --  Constraint angebot_ziel_ortSK FOREIGN KEY(Ort_Ziel) REFERENCES Ort(Name),
-	Abfahrt TIMESTAMP(0) ,
-	Fruehste_Startzeit TIMESTAMP(0) ,
-	Spaeteste_Startzeit TIMESTAMP(0) ,
+	Abfahrt DATE ,
+	Fruehste_Startzeit DATE ,
+	Spaeteste_Startzeit DATE ,
 	Gesuchte_Plaetze   NUMBER(2)     NOT NULL,
 	Bemerkung          VARCHAR2(255)           ,
 	Vermittlungsgebuehr VARCHAR2 (20),
 	Erfasst_von        NUMBER(10)  NOT NULL,
-	Erfasst_am         TIMESTAMP(0)  NOT NULL,
+	Erfasst_am         DATE  NOT NULL,
 
 	constraint erfasst_SK foreign key(Erfasst_von) REFERENCES Mitarbeiter(PersonalNr)
 	  --SK auf PK zum mitarbeiter (PersonalNr)
@@ -95,14 +93,14 @@ CREATE TABLE Angebot(
  -- Constraint angebot_ziel_ortSK FOREIGN KEY(Ort_Ziel) REFERENCES Ort(Name),
 --  Constraint angebot_ueber_ortSK FOREIGN KEY(Ort_ueber) REFERENCES Ort(Name),
 
-	Abfahrt TIMESTAMP(0) 			 ,
-	Fruehste_Startzeit TIMESTAMP(0)  	 ,
-	Spateste_Startzeit TIMESTAMP(0)  	 ,
+	Abfahrt DATE 			 ,
+	Fruehste_Startzeit DATE  	 ,
+	Spaeteste_Startzeit DATE  	 ,
 	Gebotene_Plaetze   NUMBER(2)     NOT NULL,
 	Treffpunkt         VARCHAR2(255)  NOT NULL,
 	Bemerkung          VARCHAR2(255)          ,
 	Erfasst_von        NUMBER(10)  NOT NULL,
-	Erfasst_am         TIMESTAMP(0)  NOT NULL,
+	Erfasst_am         DATE  NOT NULL,
 
 	constraint erfasst_SK2 foreign key(Erfasst_von) REFERENCES Mitarbeiter(PersonalNr)
 	--SK auf PK zum mitarbeiter (PersonalNr)
@@ -110,39 +108,35 @@ CREATE TABLE Angebot(
 
 
 
+--CREATE TABLE Beziehung_Kunde_Gesuch(
+--	GesuchNr NUMBER(10), --constraint kunde_gesuch_gesuchNR_pk REFERENCES GESUCH(GesuchNr),
+--	KundenNr NUMBER(10), --1constraint kunde_gesuch_KundenNR_pk REFERENCES Kunde(KundenNr),
+--	CONSTRAINT kunde_gesuch_gesuchNr_sk FOREIGN KEY(GesuchNr) REFERENCES Gesuch(GesuchNr),
+--	CONSTRAINT kunde_gesuch_KundenNr_sk FOREIGN KEY(KundenNr) REFERENCES Kunde(KundenNr)
 
-CREATE TABLE Beziehung_Kunde_Gesuch(
-	GesuchNr NUMBER(10), --constraint kunde_gesuch_gesuchNR_pk REFERENCES GESUCH(GesuchNr),
-	KundenNr NUMBER(10), --1constraint kunde_gesuch_KundenNR_pk REFERENCES Kunde(KundenNr),
-	CONSTRAINT kunde_gesuch_gesuchNr_sk FOREIGN KEY(GesuchNr) REFERENCES Gesuch(GesuchNr),
-	CONSTRAINT kunde_gesuch_KundenNr_sk FOREIGN KEY(KundenNr) REFERENCES Kunde(KundenNr)
-
-);
-
-
-
-CREATE TABLE Beziehung_Kunde_Angebot(
-	AngebotNr NUMBER(10),-- constraint kunde_angebot_gesuchNR_pk REFERENCES Angebot(AngebotNr),
-	KundenNr NUMBER(10),-- constraint kunde_angebot_KundenNR_pk REFERENCES Kunde(KundenNr),
-
-	CONSTRAINT kunde_angebot_gesuchNr_sk FOREIGN KEY(AngebotNr) REFERENCES Angebot(AngebotNr),
-	CONSTRAINT kunde_angebot_KundenNr_sk FOREIGN KEY(KundenNr) REFERENCES Kunde(KundenNr)
-
-
-);
+--);
 
 
 
-CREATE TABLE Beziehung_Strecken
-(
+--CREATE TABLE Beziehung_Kunde_Angebot(
+--	AngebotNr NUMBER(10),-- constraint kunde_angebot_gesuchNR_pk REFERENCES Angebot(AngebotNr),
+--	KundenNr NUMBER(10),-- constraint kunde_angebot_KundenNR_pk REFERENCES Kunde(KundenNr),
+
+--	CONSTRAINT kunde_angebot_gesuchNr_sk FOREIGN KEY(AngebotNr) REFERENCES Angebot(AngebotNr),
+--	CONSTRAINT kunde_angebot_KundenNr_sk FOREIGN KEY(KundenNr) REFERENCES Kunde(KundenNr)
+
+
+--);
+
+
+
+CREATE TABLE Beziehung_Strecken(
 	KM NUMBER(5) NOT NULL,
 	Ort_Start VARCHAR2(20),
 	Ort_Ziel VARCHAR2(20),
 	Constraint strecke_start_SK FOREIGN KEY(Ort_Start) REFERENCES Ort(Name),
 	constraint strecke_ziel_SK FOREIGN KEY(Ort_Ziel) REFERENCES Ort(Name)
-
 );
-
 
 
 
@@ -163,21 +157,23 @@ CREATE TABLE Beziehung_Vermittlung(
 	constraint mitfahrer_sk FOREIGN KEY(Mitfahrer) REFERENCES Kunde(KundenNr),
 
 
-	Fahrt_duerchgefuehrt NUMBER, --weis nicht wie genau
+	Fahrt_durchgefuehrt NUMBER, --weis nicht wie genau
 	GEBUEHR VARCHAR2(20),
-	Bezahlt_am TIMESTAMP(0),
+	Bezahlt_am DATE,
 	Bezahlt_bei VARCHAR2(20),
 	vermittelt_von VARCHAR2(209),
-	vermittelt_am TIMESTAMP(0)
-
-
+	vermittelt_am DATE
 );
 
 
 
 CREATE TABLE Beziehung_Auto_Kunde(
+  KundenNr NUMBER(10) CONSTRAINT kundeSk REFERENCES Kunde(KundenNr) ,
+  Kennzeichen VARCHAR2(20) CONSTRAINT KennzeichenSk REFERENCES Auto(Kennzeichen)
+);
 
-KundenNr NUMBER(10) CONSTRAINT kundeSk REFERENCES Kunde(KundenNr) ,
-Kennzeichen VARCHAR2(20) CONSTRAINT KennzeichenSk REFERENCES Auto(Kennzeichen)
-
+CREATE TABLE Parameter(
+  BenzinKostenbeteiligung DECIMAL (4,2),
+  Vermittlungsgebuer NUMBER (2),
+  maximaler_Umweg NUMBER (3)
 );
