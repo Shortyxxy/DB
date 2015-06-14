@@ -1,0 +1,227 @@
+--Theoretische Testat Aufgaben:
+
+--SELECT Befehle fuer einzelne Tabellen:
+SELECT * FROM Mitarbeiter;
+SELECT * FROM Ort;
+SELECT * FROM Auto;
+SELECT * FROM Kunde;
+SELECT * FROM Gesuch;
+SELECT * FROM Angebot;
+SELECT * FROM Beziehung_Strecken;
+SELECT * FROM Beziehung_Vermittlung;
+SELECT * FROM Beziehung_Auto_Kunde;
+SELECT * FROM Parameter;
+
+--Aus 5:
+--Aufgabe 5.1 a)
+--a) Geben Sie die Anzahl an Gesuchen pro Kundennummer aus:
+SELECT Count(GesuchNr)"Anzahl der Gesuche", Kunde.KundenNr FROM Kunde, Gesuch
+WHERE Kunde.KundenNr = Gesuch.Suchender(+) GROUP BY Kunde.KundenNr ORDER BY Kunde.KundenNr ASC;
+
+--Durchschnittliche Anzahl der Gesuche pro Kunde:
+SELECT Avg(Count(GesuchNr))"Durchschnitt. Gesuche" FROM Kunde, Gesuch
+WHERE Kunde.KundenNr = Gesuch.Suchender(+) GROUP BY Kunde.KundenNr;
+
+--Durchschnittliche Anzahl der Angebote unter allen Kunden:
+SELECT Avg(Count(AngebotNr))"Durchschnitt. Gesuche" FROM Kunde, Angebot
+WHERE Kunde.KundenNr = Angebot.Bietender GROUP BY Kunde.KundenNr;
+
+--b) Anzahl der Autos pro Kundennummer:
+SELECT Count(Beziehung_Auto_Kunde.KundenNr) "Anzahl der Autos", Kunde.KundenNr "Kundennummer" FROM Kunde, Beziehung_Auto_Kunde
+WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr(+) GROUP BY Kunde.KundenNr ORDER BY Kunde.KundenNr ASC;
+
+--b) Geben Sie die durchschnittliche Anzahl an Autos pro Kunde aus:
+SELECT Avg(Count(Beziehung_Auto_Kunde.KundenNr)) "Durchschn. Autos" FROM Kunde, Beziehung_Auto_Kunde
+WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr GROUP BY Kunde.KundenNr ORDER BY Kunde.KundenNr ASC;
+
+--c) Geben Sie die Anzahl an Vermittlungen pro Angebot aus:
+SELECT Count(Beziehung_Vermittlung.AngebotNr)"Anzahl Vermitt.", Angebot.AngebotNr FROM Angebot, Beziehung_Vermittlung
+WHERE Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr(+) GROUP BY Angebot.AngebotNr;
+
+--c) Geben Sie die durchschnittliche Anzahl an Vermittlungen aus:
+SELECT Avg(Count(Beziehung_Vermittlung.AngebotNr))"Durchschnitt. Vermitt." FROM Angebot, Beziehung_Vermittlung
+WHERE Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr(+) GROUP BY Angebot.AngebotNr;
+
+
+--Aufgabe 5.2 a)
+--a) Geben Sie die gesamten Kunden nach Vornamen geordnet aus
+SELECT Vorname, Name FROM Kunde ORDER BY Vorname ASC;
+
+--b) Geben Sie die gesamten Kunden nach Telefonnummer geordnet aus
+SELECT Vorname, Name, Telefonnummer FROM Kunde ORDER BY Telefonnummer ASC;
+
+--c) Geben Sie die gesamten Angebote nach Abfahrtszeit geordnet aus
+SELECT * FROM Angebot ORDER BY Abfahrt ASC;
+
+--d) Geben Sie die gesamten Gesuche nach Einstellungsdatum geordnet aus
+SELECT * FROM Gesuch ORDER BY erfasst_am ASC;
+
+--e) Geben Sie die gesamten Autos nach Kennzeichen geordnet aus
+SELECT * FROM Auto ORDER BY Kennzeichen ASC;
+
+--Aufgabe 5.2 b)
+--a) Geben Sie die gesamten Kunden nach Vornamen geordnet absteigend und, innerhalb der gleichen Funktion, nach Wohnort aufsteigend geordnet aus
+SELECT Vorname, Name, Stadt FROM Kunde ORDER BY Vorname DESC, Stadt ASC;
+
+--b) Geben Sie die gesamten Gesuche nach Einstellungsdatum und Abfahrtsdatum aufsteigend geordnet aus
+SELECT * FROM Gesuch ORDER BY erfasst_am ASC, abfahrt ASC;
+
+--c) Geben Sie die gesamten Mitarbeiter nach MitarbeiterNr aufsteigend und Wohnort absteigend sortiert aus
+SELECT * FROM Mitarbeiter ORDER BY PersonalNr ASC, Stadt DESC;
+
+
+--Aufgabe 5.3
+--a) Geben Sie Zielort und Streckenlänge aller Angebote an, die länger sind als die durchschnittliche Streckenanzahl aller Strecken
+SELECT Angebot.Ort_Start, Angebot.Ort_ziel, Beziehung_Strecken.km FROM Angebot, Beziehung_Strecken
+WHERE Angebot.Ort_Start = Beziehung_Strecken.Ort_Start AND Angebot.Ort_Ziel = Beziehung_Strecken.Ort_Ziel AND Beziehung_Strecken.km > (SELECT Avg(km) FROM Beziehung_Strecken);
+
+--b) Geben sie alle Angebote an die die gleiche Strecke befahren wie Bsp:
+SELECT * FROM Angebot "A1" WHERE A1.ort_start = 'Mannheim' AND A1.ort_ziel = 'Dortmund';
+
+--c) Geben sie alle Gesuche an die die gleichen Strecken befahren wie Angebote
+SELECT Gesuch.GesuchNr, Gesuch.Ort_start, Gesuch.Ort_ziel, Angebot.AngebotNr, Angebot.Ort_start, Angebot.Ort_ziel FROM Angebot, Gesuch
+WHERE Angebot.ort_start = Gesuch.Ort_start AND Angebot.ort_ziel = Gesuch.Ort_ziel;
+
+--d) Geben sie alle Angebote an die die gleichen Streckenlänge haben wie z.B Mannheim - Dortmund:
+SELECT Beziehung_Strecken.km, Angebot.AngebotNr, Angebot.Ort_start, Angebot.Ort_ziel FROM Angebot, Beziehung_Strecken
+WHERE Beziehung_Strecken.km = (SELECT km FROM Beziehung_Strecken WHERE Ort_start = 'Mannheim' AND Ort_Ziel = 'Dortmund') AND Beziehung_Strecken.ort_Start = Angebot.ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel;
+
+--e) Geben sie alle Angebote an, die den gleichen Besitzer haben (selber einen auswählen hier!) z.B Hans Meier:
+SELECT Angebot.AngebotNr, Bietender, Vorname, Name FROM Angebot, Kunde WHERE Bietender = KundenNr AND Name = 'Meier' AND Vorname = 'Hans';
+
+--f) Geben sie alle Gesuche an, die den gleichen Suchenden haben (selber einen auswählen hier!) z.B Franz Muetzenmeier:
+SELECT Gesuch.GesuchNr, Suchender, Vorname, Name FROM Gesuch, Kunde WHERE Suchender = KundenNr AND Name = 'Muetzenmeier' AND Vorname = 'Franz';
+
+
+--Aufgabe 5.4 a)
+--a) Geben Sie alle Rollen die aus ein Mitarbeiter haben können, doppelte Nennungen ausgeschlossen
+SELECT DISTINCT Position FROM Mitarbeiter ORDER BY Position ASC;
+
+--b) Geben Sie alle Orte aus die angefahren werden können, doppelte Nennungen ausgeschlossen
+SELECT DISTINCT Name FROM Ort ORDER BY Name ASC;
+
+
+--Aufgabe 5.4 b)
+--a) Geben Sie aus wie viele verschiedene Kunden ein Angebot eingestellt haben
+SELECT Count(DISTINCT Bietender) FROM Angebot;
+
+--b) Geben Sie aus wie viele verschiedene Kunden ein Gesuch eingestellt haben
+SELECT Count(DISTINCT Suchender) FROM Gesuch;
+
+--c) Geben Sie aus wie viele verschiedene Kunden ein Auto haben
+SELECT Count(DISTINCT KundenNr) FROM Beziehung_Auto_kunde;
+
+--d) Geben sie aus wie viele verschiedene Kunden eine vermittelte Fahrt haben
+SELECT Count(DISTINCT Fahrer) + Count(DISTINCT Mitfahrer) "Vermittelte Personen" FROM Beziehung_Vermittlung;
+
+--e) Geben sie aus wie viele Strecken in Angeboten geboten werden, beide Richtungen beachten!
+SELECT Count(DISTINCT Beziehung_Strecken.km) "Anz. Strecken Angebote" FROM Beziehung_Strecken, Angebot
+WHERE (Beziehung_Strecken.ort_Start = Angebot.ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel) OR (Beziehung_Strecken.ort_ziel = Angebot.ort_Start AND Beziehung_Strecken.ort_start = Angebot.ort_ziel);
+
+--f) Geben sie aus wie viele Strecken in Gesuchen geboten werden, beide Richtungen beachten!
+SELECT Count(DISTINCT Beziehung_Strecken.km) "Anz. Strecken Gesuche" FROM Beziehung_Strecken, Gesuch
+WHERE (Beziehung_Strecken.ort_Start = Gesuch.ort_Start AND Beziehung_Strecken.ort_ziel = Gesuch.ort_ziel) OR (Beziehung_Strecken.ort_ziel = Gesuch.ort_Start AND Beziehung_Strecken.ort_start = Gesuch.ort_ziel);
+
+--g) Geben sie aus wie viele Strecken vermittelt wurden
+SELECT Count(Fahrt_duerchgefuehrt) "Vermittelte Strecken" FROM Beziehung_Vermittlung;
+
+--Aufgabe 5.5
+--a) Geben Sie an, welche Kunden an welcher Fahrt teilnehmen
+SELECT Kunde.Vorname, Kunde.Name, Angebot.Ort_start, Angebot.Ort_ziel FROM Beziehung_Vermittlung, Kunde, Angebot
+WHERE (Kunde.KundenNr = Beziehung_Vermittlung.Fahrer AND Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr) OR (Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr);
+
+--b) Geben sie das Autokennzeichen und die Anzahl der Besitzer eines Autos aus
+SELECT Count(DISTINCT Beziehung_Auto_Kunde.KundenNr) "Anzahl Besitzer", Beziehung_Auto_Kunde.Kennzeichen FROM Beziehung_Auto_Kunde, Kunde
+WHERE Beziehung_auto_kunde.KundenNr = Kunde.KundenNr GROUP BY Kennzeichen;
+
+--c) Geben Sie an wie oft eine Strecke gefahren wurde:
+SELECT Count(km) "Anzahl gefahren", Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel FROM Beziehung_Strecken, Beziehung_Vermittlung, Angebot
+WHERE (Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr AND Angebot.ort_start = Beziehung_Strecken.ort_start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel AND (Beziehung_Vermittlung.Fahrt_duerchgefuehrt = 1))
+GROUP BY Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel;
+
+--d) Geben sie eine angebotene Strecke aus, die mindestens von 2 Leuten gesucht wird
+SELECT Angebot.ort_start, Angebot.ort_ziel FROM Angebot, Gesuch
+WHERE (Angebot.ort_start = Gesuch.ort_start AND Angebot.ort_ziel = Gesuch.ort_ziel)
+GROUP BY Angebot.ort_start, angebot.ort_ziel HAVING Count(DISTINCT GesuchNr) > 0;
+
+--e) Geben sie eine gesuchte Strecke aus, die öfters als 3 mal vermittelt wurden
+
+
+--f) Geben sie die Strecke aus , mit Start und Zielort die am wenigstens befahren wurde aber mindestens einmal gefahren wurde
+SELECT Angebot.ort_start, Angebot.ort_ziel, Fahrt_duerchgefuehrt FROM Angebot, Beziehung_Vermittlung
+WHERE (Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr)
+GROUP BY Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel, Beziehung_vermittlung.Fahrt_duerchgefuehrt HAVING Fahrt_duerchgefuehrt >= 1 ORDER BY Fahrt_duerchgefuehrt ASC;
+
+--g) Geben sie die kleines AngebotsNr und GesuchsNr aus die zu einer Fahrt vermittelt wurden
+
+
+--Aufgabe 6.1
+--a) Erzeugen sie das kartesische Produkt der Tabellen "Angebot" und "Kunden"
+SELECT * FROM Angebot, Kunde;
+SELECT * FROM Angebot, Kunde WHERE Angebot.Bietender = Kunde.KundenNr;
+SELECT Vorname, Name, Stadt, Telefonnummer, AngebotNr, ort_start, ort_ziel FROM Angebot, Kunde WHERE Angebot.Bietender = Kunde.KundenNr;
+SELECT Vorname, Name, Stadt, Telefonnummer, AngebotNr, ort_start, ort_ziel FROM Angebot, Kunde WHERE Angebot.Bietender = Kunde.KundenNr AND Kunde.Stadt = 'Wiesloch';
+
+--a1) Erzeugen sie das kartesische Produkt der Tabellen "Gesuch" und "Kunden"
+SELECT * FROM Gesuch, Kunde;
+SELECT * FROM Gesuch, Kunde WHERE Gesuch.Suchender = Kunde.KundenNr;
+SELECT Vorname, Name, Stadt, Telefonnummer, GesuchNr, ort_start, ort_ziel FROM Gesuch, Kunde WHERE Gesuch.Suchender = Kunde.KundenNr;
+SELECT Vorname, Name, Stadt, Telefonnummer, GesuchNr, ort_start, ort_ziel FROM Gesuch, Kunde WHERE Gesuch.Suchender = Kunde.KundenNr AND Kunde.Stadt = 'Wiesloch';
+
+
+--a2) Erzeugen sie das kartesische Produkt der Tabellen "Auto" und "Kunden"
+SELECT * FROM Auto, Kunde;
+SELECT * FROM Beziehung_Auto_Kunde, Kunde WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr;
+SELECT Vorname, Name, Stadt, Kennzeichen FROM Beziehung_Auto_Kunde, Kunde WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr;
+SELECT Vorname, Name, Stadt, Kennzeichen FROM Beziehung_Auto_Kunde, Kunde WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr AND Kunde.Stadt = 'Wiesloch';
+
+
+--Aufgabe 6.2
+--a) Erzeugen Sie das kartesische Produkt der Tabellen "Kunde","Angebot","Gesuch" und
+--geben Sie alle Spalten aller Datensätze aus
+SELECT * FROM Kunde, Angebot, Gesuch;
+
+--a2) Erzeugen Sie das kartesische Produkt der Tabellen "Ort","Mitarbeiter","Kunde" und
+--geben Sie alle Spalten aller Datensätze aus
+SELECT * FROM Ort, Mitarbeiter, Kunde;
+
+
+--a2) Erzeugen Sie das kartesische Produkt der Tabellen "Auto","Mitarbeiter","Kunde" und
+--geben Sie alle Spalten aller Datensätze aus
+SELECT * FROM Auto, Mitarbeiter, Kunde;
+
+
+--a3) Erzeugen Sie das kartesische Produkt der Tabellen "Vermittlung","Strecke","Ort" und
+--geben Sie alle Spalten aller Datensätze aus
+SELECT * FROM Beziehung_Vermittlung, Beziehung_Strecken, Ort;
+
+
+--Aufgabe 6.3
+--ACHTUNG: Lösen Sie alle folgenden Aufgaben mit Tabellenverknüpfungen (JOIN). Verwenden Sie in der Select – Anweisung KEINE andere Select Anweisung als Unterabfrage
+--a) Gesucht sind die Namen aller Kunden und die zugehörenden Angebote
+SELECT Vorname, Name, AngebotNr, ort_start, ort_ziel FROM Angebot, Kunde WHERE Angebot.Bietender = Kunde.KundenNr;
+
+--b) Gesucht sind die Autos aller Kunden und die zugehörenden Gesuche
+SELECT DISTINCT Vorname, Name, Kennzeichen FROM Beziehung_Auto_Kunde, Kunde, Gesuch WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr AND Kunde.KundenNr = Gesuch.Suchender;
+
+--c) Gesucht sind Name,Auto und Angebote eines bestimmten Kunden (selber einen aussuchen!)
+SELECT DISTINCT Vorname, Name, Kennzeichen, angebotnr, ort_start, ort_ziel FROM Beziehung_Auto_Kunde, Kunde, Angebot
+WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr AND Kunde.Name = 'Mueller' AND Kunde.KundenNr = Angebot.Bietender;
+
+--d) Gesucht sind Name, KundenNr die eine höhere KundenNr haben als X (selber jemanden aussuchen). Zusätzlich soll bei jeder Ausgabezeile noch die KundenNr von diesem Kunden X ausgegeben werden (Mit SELF – Join!)
+SELECT k1.Name, k1.KundenNr, k2.KundenNr, k2.Name FROM Kunde "K1", Kunde "K2" WHERE k2.name = 'Mueller' AND k1.kundenNr > k2.kundenNr;
+
+--e) Gesucht sind alle Autos die gleich viele Plätze anbieten wie von Herr Meier – keine doppelten Angaben!
+SELECT Modell, Sitze FROM Auto "A1", Kunde "K1", Beziehung_Auto_kunde "B1"
+WHERE k1.KundenNr = b1.KundenNr AND b1.Kennzeichen = a1.Kennzeichen AND a1.Sitze > ANY (SELECT Sitze FROM Auto "A2", Kunde "K2", Beziehung_Auto_kunde "B2" WHERE k2.KundenNr = b2.KundenNr AND b2.Kennzeichen = a2.Kennzeichen AND k2.Name = 'Meier' AND k2.Vorname = 'Hans');
+
+--f) Gesucht sind alle Strecken die von Mannheim aus los gehen
+SELECT Ort_start, Ort_ziel FROM Beziehung_Strecken WHERE Ort_start = 'Mannheim';
+
+--g) Gesucht sind alle Angebote die von Mannheim aus los gehen
+SELECT AngebotNr, Ort_start, Ort_ziel FROM Angebot WHERE Ort_start = 'Mannheim';
+
+--h) Gsucht sind KundenName, KundenNr, AngebotNr, GesuchNr aller vermittelten Fahrten, sowie das Kennzeichen des verwendeten Autos und der Mitarbeiter der diese Fahrt eingestellt hat
+SELECT Kunde.Name, Kunde.KundenNr, Beziehung_Vermittlung.AngebotNr, Beziehung_Vermittlung.GesuchNr, Beziehung_Auto_Kunde.Kennzeichen, Mitarbeiter.Name FROM Kunde, Beziehung_Vermittlung,Beziehung_Auto_kunde, Mitarbeiter
+WHERE (Kunde.KundenNr = Beziehung_Vermittlung.Fahrer AND Kunde.KundenNr = Beziehung_Auto_kunde.KundenNr AND Beziehung_Vermittlung.Vermittelt_Von = Mitarbeiter.PersonalNr)
+OR (Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Kunde.KundenNr = Beziehung_Auto_kunde.KundenNr AND Beziehung_Vermittlung.Vermittelt_Von = Mitarbeiter.PersonalNr);
