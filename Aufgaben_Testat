@@ -123,7 +123,7 @@ SELECT Count(DISTINCT Beziehung_Strecken.km) "Anz. Strecken Gesuche" FROM Bezieh
 WHERE (Beziehung_Strecken.ort_Start = Gesuch.ort_Start AND Beziehung_Strecken.ort_ziel = Gesuch.ort_ziel) OR (Beziehung_Strecken.ort_ziel = Gesuch.ort_Start AND Beziehung_Strecken.ort_start = Gesuch.ort_ziel);
 
 --g) Geben sie aus wie viele Strecken vermittelt wurden
-SELECT Count(Fahrt_duerchgefuehrt) "Vermittelte Strecken" FROM Beziehung_Vermittlung;
+SELECT Count(Fahrt_durchgefuehrt) "Vermittelte Strecken" FROM Beziehung_Vermittlung;
 
 --Aufgabe 5.5
 --a) Geben Sie an, welche Kunden an welcher Fahrt teilnehmen
@@ -136,7 +136,7 @@ WHERE Beziehung_auto_kunde.KundenNr = Kunde.KundenNr GROUP BY Kennzeichen;
 
 --c) Geben Sie an wie oft eine Strecke gefahren wurde:
 SELECT Count(km) "Anzahl gefahren", Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel FROM Beziehung_Strecken, Beziehung_Vermittlung, Angebot
-WHERE (Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr AND Angebot.ort_start = Beziehung_Strecken.ort_start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel AND (Beziehung_Vermittlung.Fahrt_duerchgefuehrt = 1))
+WHERE (Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr AND Angebot.ort_start = Beziehung_Strecken.ort_start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel AND (Beziehung_Vermittlung.Fahrt_durchgefuehrt = 1))
 GROUP BY Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel;
 
 --d) Geben sie eine angebotene Strecke aus, die mindestens von 2 Leuten gesucht wird
@@ -148,9 +148,9 @@ GROUP BY Angebot.ort_start, angebot.ort_ziel HAVING Count(DISTINCT GesuchNr) > 0
 
 
 --f) Geben sie die Strecke aus , mit Start und Zielort die am wenigstens befahren wurde aber mindestens einmal gefahren wurde
-SELECT Angebot.ort_start, Angebot.ort_ziel, Fahrt_duerchgefuehrt FROM Angebot, Beziehung_Vermittlung
+SELECT Angebot.ort_start, Angebot.ort_ziel, Fahrt_durchgefuehrt FROM Angebot, Beziehung_Vermittlung
 WHERE (Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr)
-GROUP BY Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel, Beziehung_vermittlung.Fahrt_duerchgefuehrt HAVING Fahrt_duerchgefuehrt >= 1 ORDER BY Fahrt_duerchgefuehrt ASC;
+GROUP BY Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel, Beziehung_vermittlung.Fahrt_durchgefuehrt HAVING Fahrt_durchgefuehrt >= 1 ORDER BY Fahrt_durchgefuehrt ASC;
 
 --g) Geben sie die kleines AngebotsNr und GesuchsNr aus die zu einer Fahrt vermittelt wurden
 
