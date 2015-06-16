@@ -12,6 +12,93 @@ SELECT * FROM Beziehung_Vermittlung;
 SELECT * FROM Beziehung_Auto_Kunde;
 SELECT * FROM Parameter;
 
+--Alle Angebote ab bestimmtem Datum:
+SELECT * FROM Angebot WHERE Abfahrt >= To_Date('01-06-2015 00:00', 'DD-MM-YY HH24:MI')
+OR Fruehste_Startzeit >= To_Date('01-06-2015 00:00', 'DD-MM-YY HH24:Mi')
+OR Spaeteste_Startzeit >= To_Date('01-06-2015 00:00', 'DD-MM-YY HH24:Mi');
+
+--Alle Angebote absteigend nach Entfernung:
+SELECT Beziehung_Strecken.km, Angebot.Ort_Start AS "Start", Angebot.Ort_ziel AS "Ziel"  FROM Angebot, Beziehung_Strecken
+WHERE
+
+   (Angebot.ort_start = Beziehung_Strecken.ort_Start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel)
+OR (Angebot.ort_start = Beziehung_Strecken.ort_ziel AND Angebot.ort_ziel = Beziehung_Strecken.ort_start)
+OR (Angebot.ort_ueber = Beziehung_Strecken.ort_start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel)
+OR (Angebot.ort_start = Beziehung_Strecken.ort_ziel AND Angebot.ort_ueber = Beziehung_Strecken.ort_ziel)
+
+
+ORDER BY km DESC;
+
+SELECT Beziehung_Strecken. km, Angebot.ort_start AS "start", Angebot.ort_ziel AS "ziel" FROM Angebot, Beziehung_Strecken
+WHERE Angebot.ort_start = Beziehung_Strecken.ort_Start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel
+UNION
+SELECT Beziehung_Strecken. km, Angebot.ort_ueber AS "start", Angebot.ort_ziel AS "ziel" FROM Angebot, Beziehung_Strecken
+WHERE Angebot.ort_ueber IS NOT NULL AND Angebot.ort_start = Beziehung_Strecken.ort_Start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel
+UNION
+SELECT Beziehung_Strecken. km, Angebot.ort_start AS "start", Angebot.ort_ueber AS "ziel" FROM Angebot, Beziehung_Strecken
+WHERE Angebot.ort_ueber IS NOT NULL AND Angebot.ort_start = Beziehung_Strecken.ort_Start AND Angebot.ort_ziel = Beziehung_Strecken.ort_ziel;
+
+
+
+
+--Alle Funktionen die ein Mitarbeiter besitzen kann ohne doppelte:
+
+--Wieviele Autos hat jeder Kunde:
+
+--Welchem Kunden gehört welches Auto:
+
+--Alle Angebote und Gesuche die die gleiche Strecke befahren
+
+--Alle Angebote die von Mannheim nach München fahren
+
+--Alle Kunden die weniger als 1 Angebot besitzen:
+
+--Alle durchgeführten Fahrten auswhälen mit KM Anzahl:
+
+--Alle Angeboteen Strecken mit Zwischenort:
+
+--angebote die vom 29.05.2015 bis 30.05.2015 gehen
+SELECT * FROM angebot WHERE  (
+ABfahrt <= To_Date('30-05-2015', 'dd-mm-yyyy') AND
+Trunc(Abfahrt) >= To_Date('29-05-2015', 'dd-mm-yyyy')) OR (
+Trunc(fruehste_startzeit) <= To_Date('30-05-2015', 'dd-mm-yyyy') AND
+trunc(spaeteste_startzeit) >= To_Date('29-05-2015', 'dd-mm-yyyy'))   ;
+
+
+--Angebote die zeitlich zu gesuchen passen
+SELECT * FROM angebot,gesuch WHERE
+angebot.abfahrt = gesuch.abfahrt OR (
+angebot.fruehste_startzeit >= gesuch.fruehste_startzeit AND
+angebot.spaeteste_startzeit <= gesuch.spaeteste_startzeit)   OR   (
+angebot.abfahrt >= gesuch.fruehste_startzeit AND
+angebot.abfahrt <= gesuch.spaeteste_startzeit)      OR (
+gesuch.abfahrt >= angebot.fruehste_startzeit AND
+gesuch.abfahrt <= gesuch.spaeteste_startzeit )     ;
+
+--Angebote die rtlich zueinander passen
+SELECT * FROM angebot,gesuch WHERE
+angebot.ort_start = gesuch.ort_start AND angebot.ort_ziel = gesuch.ort_ziel OR
+angebot.ort_ueber = gesuch.ort_start AND angebot.ort_Ziel = gesuch.ort_ziel OR
+angebot.ort_ueber = gesuch.ort_ziel  AND angebot.ort_start = gesuch.ort_start;
+
+
+--angebote und gesuche die zeitlich und ordneltich zueinander passen
+SELECT Angebot.Ort_start, Angebot.Ort_ziel, Gesuch.ort_start, Gesuch.ort_ziel FROM angebot,gesuch
+WHERE (angebot.abfahrt = gesuch.abfahrt
+OR (angebot.fruehste_startzeit >= gesuch.fruehste_startzeit AND angebot.spaeteste_startzeit <= gesuch.spaeteste_startzeit)
+OR (angebot.abfahrt >= gesuch.fruehste_startzeit AND angebot.abfahrt <= gesuch.spaeteste_startzeit)
+OR (gesuch.abfahrt >= angebot.fruehste_startzeit AND gesuch.abfahrt <= gesuch.spaeteste_startzeit ))
+AND  (angebot.ort_start = gesuch.ort_start AND angebot.ort_ziel = gesuch.ort_ziel
+OR angebot.ort_ueber = gesuch.ort_start AND angebot.ort_Ziel = gesuch.ort_ziel
+OR angebot.ort_start = gesuch.ort_start  AND angebot.ort_ueber = gesuch.ort_start)                                                                                                ;
+
+--gesuche die in vermittelt wurden
+SELECT * FROM gesuch,beziehung_vermittlung WHERE gesuch.gesuchnr = beziehung_vermittlung.gesuchnr;
+
+
+--angebote die vermittelt wurden
+SELECT * FROM angebot,beziehung_vermittlung WHERE beziehung_vermittlung.angebotnr = angebot.angebotnr;
+
 --Aus 5:
 --Aufgabe 5.1 a)
 --a) Geben Sie die Anzahl an Gesuchen pro Kundennummer aus:
@@ -24,15 +111,15 @@ WHERE Kunde.KundenNr = Gesuch.Suchender(+) GROUP BY Kunde.KundenNr;
 
 --Durchschnittliche Anzahl der Angebote unter allen Kunden:
 SELECT Avg(Count(AngebotNr))"Durchschnitt. Gesuche" FROM Kunde, Angebot
-WHERE Kunde.KundenNr = Angebot.Bietender GROUP BY Kunde.KundenNr;
+WHERE Kunde.KundenNr = Angebot.Bietender(+) GROUP BY Kunde.KundenNr;
 
 --b) Anzahl der Autos pro Kundennummer:
-SELECT Count(Beziehung_Auto_Kunde.KundenNr) "Anzahl der Autos", Kunde.KundenNr "Kundennummer" FROM Kunde, Beziehung_Auto_Kunde
-WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr(+) GROUP BY Kunde.KundenNr ORDER BY Kunde.KundenNr ASC;
+SELECT Count(Beziehung_Auto_Kunde.KundenNr) "Anzahl der Autos", Kunde.KundenNr "Kundennummer", Kunde.Name "Name" FROM Kunde, Beziehung_Auto_Kunde
+WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr(+) GROUP BY Kunde.KundenNr, Kunde.Name ORDER BY Kunde.KundenNr ASC;
 
 --b) Geben Sie die durchschnittliche Anzahl an Autos pro Kunde aus:
-SELECT Avg(Count(Beziehung_Auto_Kunde.KundenNr)) "Durchschn. Autos" FROM Kunde, Beziehung_Auto_Kunde
-WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr GROUP BY Kunde.KundenNr ORDER BY Kunde.KundenNr ASC;
+SELECT Avg(Count(Beziehung_Auto_kunde.KundenNr)) "Durchschn. Autos" FROM Kunde, Beziehung_Auto_Kunde
+WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr(+) GROUP BY Kunde.KundenNr ORDER BY Kunde.KundenNr ASC;
 
 --c) Geben Sie die Anzahl an Vermittlungen pro Angebot aus:
 SELECT Count(Beziehung_Vermittlung.AngebotNr)"Anzahl Vermitt.", Angebot.AngebotNr FROM Angebot, Beziehung_Vermittlung
@@ -84,7 +171,8 @@ WHERE Angebot.ort_start = Gesuch.Ort_start AND Angebot.ort_ziel = Gesuch.Ort_zie
 
 --d) Geben sie alle Angebote an die die gleichen Streckenlänge haben wie z.B Mannheim - Dortmund:
 SELECT Beziehung_Strecken.km, Angebot.AngebotNr, Angebot.Ort_start, Angebot.Ort_ziel FROM Angebot, Beziehung_Strecken
-WHERE Beziehung_Strecken.km = (SELECT km FROM Beziehung_Strecken WHERE Ort_start = 'Mannheim' AND Ort_Ziel = 'Dortmund') AND Beziehung_Strecken.ort_Start = Angebot.ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel;
+WHERE Beziehung_Strecken.km = (SELECT km FROM Beziehung_Strecken WHERE Ort_start = 'Mannheim' AND Ort_Ziel = 'Dortmund')
+AND Beziehung_Strecken.ort_Start = Angebot.ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel;
 
 --e) Geben sie alle Angebote an, die den gleichen Besitzer haben (selber einen auswählen hier!) z.B Hans Meier:
 SELECT Angebot.AngebotNr, Bietender, Vorname, Name FROM Angebot, Kunde WHERE Bietender = KundenNr AND Name = 'Meier' AND Vorname = 'Hans';
@@ -111,12 +199,20 @@ SELECT Count(DISTINCT Suchender) FROM Gesuch;
 --c) Geben Sie aus wie viele verschiedene Kunden ein Auto haben
 SELECT Count(DISTINCT KundenNr) FROM Beziehung_Auto_kunde;
 
+--Alle Kunden die mehr als 1 Auto haben auflisten:
+SELECT Count(Kunde.KundenNr), Kunde.KundenNr FROM Kunde, Beziehung_Auto_kunde
+WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr GROUP BY Kunde.KundenNr HAVING Count(Kunde.KundenNr) > 1;
+
 --d) Geben sie aus wie viele verschiedene Kunden eine vermittelte Fahrt haben
 SELECT Count(DISTINCT Fahrer) + Count(DISTINCT Mitfahrer) "Vermittelte Personen" FROM Beziehung_Vermittlung;
 
 --e) Geben sie aus wie viele Strecken in Angeboten geboten werden, beide Richtungen beachten!
-SELECT Count(DISTINCT Beziehung_Strecken.km) "Anz. Strecken Angebote" FROM Beziehung_Strecken, Angebot
-WHERE (Beziehung_Strecken.ort_Start = Angebot.ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel) OR (Beziehung_Strecken.ort_ziel = Angebot.ort_Start AND Beziehung_Strecken.ort_start = Angebot.ort_ziel);
+SELECT Count(Beziehung_Strecken.km) "Anz. Strecken Angebote" FROM Beziehung_Strecken, Angebot
+WHERE (Beziehung_Strecken.ort_Start = Angebot.ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel)
+OR (Beziehung_Strecken.ort_ziel = Angebot.ort_Start AND Beziehung_Strecken.ort_start = Angebot.ort_ziel)
+OR (Beziehung_Strecken.ort_start = Angebot.ort_ueber AND  Beziehung_Strecken.ort_ziel = Angebot.ort_ziel)
+OR (Beziehung_Strecken.ort_start = Angebot.ort_start AND  Beziehung_Strecken.ort_ziel = Angebot.ort_ueber) GROUP BY Beziehung_strecken.km;
+
 
 --f) Geben sie aus wie viele Strecken in Gesuchen geboten werden, beide Richtungen beachten!
 SELECT Count(DISTINCT Beziehung_Strecken.km) "Anz. Strecken Gesuche" FROM Beziehung_Strecken, Gesuch
@@ -131,8 +227,8 @@ SELECT Kunde.Vorname, Kunde.Name, Angebot.Ort_start, Angebot.Ort_ziel FROM Bezie
 WHERE (Kunde.KundenNr = Beziehung_Vermittlung.Fahrer AND Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr) OR (Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Angebot.AngebotNr = Beziehung_Vermittlung.AngebotNr);
 
 --b) Geben sie das Autokennzeichen und die Anzahl der Besitzer eines Autos aus
-SELECT Count(DISTINCT Beziehung_Auto_Kunde.KundenNr) "Anzahl Besitzer", Beziehung_Auto_Kunde.Kennzeichen FROM Beziehung_Auto_Kunde, Kunde
-WHERE Beziehung_auto_kunde.KundenNr = Kunde.KundenNr GROUP BY Kennzeichen;
+SELECT Count(DISTINCT Beziehung_Auto_Kunde.KundenNr) "Anzahl", Kunde.KundenNr, Beziehung_Auto_Kunde.Kennzeichen FROM Beziehung_Auto_Kunde, Kunde
+WHERE Beziehung_auto_kunde.KundenNr = Kunde.KundenNr GROUP BY Kunde.KundenNr, Beziehung_Auto_kunde.kennzeichen;
 
 --c) Geben Sie an wie oft eine Strecke gefahren wurde:
 SELECT Count(km) "Anzahl gefahren", Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel FROM Beziehung_Strecken, Beziehung_Vermittlung, Angebot
@@ -142,7 +238,7 @@ GROUP BY Angebot.AngebotNr, Angebot.ort_start, Angebot.ort_ziel;
 --d) Geben sie eine angebotene Strecke aus, die mindestens von 2 Leuten gesucht wird
 SELECT Angebot.ort_start, Angebot.ort_ziel FROM Angebot, Gesuch
 WHERE (Angebot.ort_start = Gesuch.ort_start AND Angebot.ort_ziel = Gesuch.ort_ziel)
-GROUP BY Angebot.ort_start, angebot.ort_ziel HAVING Count(DISTINCT GesuchNr) > 0;
+GROUP BY Angebot.ort_start, angebot.ort_ziel HAVING Count(GesuchNr) > 0;
 
 --e) Geben sie eine gesuchte Strecke aus, die öfters als 3 mal vermittelt wurden
 
@@ -205,7 +301,7 @@ SELECT Vorname, Name, AngebotNr, ort_start, ort_ziel FROM Angebot, Kunde WHERE A
 SELECT DISTINCT Vorname, Name, Kennzeichen FROM Beziehung_Auto_Kunde, Kunde, Gesuch WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr AND Kunde.KundenNr = Gesuch.Suchender;
 
 --c) Gesucht sind Name,Auto und Angebote eines bestimmten Kunden (selber einen aussuchen!)
-SELECT DISTINCT Vorname, Name, Kennzeichen, angebotnr, ort_start, ort_ziel FROM Beziehung_Auto_Kunde, Kunde, Angebot
+SELECT DISTINCT Vorname, Name, Angebot.Kennzeichen, angebotnr, ort_start, ort_ziel FROM Beziehung_Auto_Kunde, Kunde, Angebot
 WHERE Beziehung_Auto_Kunde.KundenNr = Kunde.KundenNr AND Kunde.Name = 'Mueller' AND Kunde.KundenNr = Angebot.Bietender;
 
 --d) Gesucht sind Name, KundenNr die eine höhere KundenNr haben als X (selber jemanden aussuchen). Zusätzlich soll bei jeder Ausgabezeile noch die KundenNr von diesem Kunden X ausgegeben werden (Mit SELF – Join!)
@@ -213,7 +309,7 @@ SELECT k1.Name, k1.KundenNr, k2.KundenNr, k2.Name FROM Kunde "K1", Kunde "K2" WH
 
 --e) Gesucht sind alle Autos die gleich viele Plätze anbieten wie von Herr Meier – keine doppelten Angaben!
 SELECT Modell, Sitze FROM Auto "A1", Kunde "K1", Beziehung_Auto_kunde "B1"
-WHERE k1.KundenNr = b1.KundenNr AND b1.Kennzeichen = a1.Kennzeichen AND a1.Sitze > ANY (SELECT Sitze FROM Auto "A2", Kunde "K2", Beziehung_Auto_kunde "B2" WHERE k2.KundenNr = b2.KundenNr AND b2.Kennzeichen = a2.Kennzeichen AND k2.Name = 'Meier' AND k2.Vorname = 'Hans');
+WHERE k1.KundenNr = b1.KundenNr AND b1.Kennzeichen = a1.Kennzeichen AND a1.Sitze =  any (SELECT Sitze FROM Auto "A2", Kunde "K2", Beziehung_Auto_kunde "B2" WHERE k2.KundenNr = b2.KundenNr AND b2.Kennzeichen = a2.Kennzeichen AND k2.Name = 'Meier' AND k2.Vorname = 'Hans');
 
 --f) Gesucht sind alle Strecken die von Mannheim aus los gehen
 SELECT Ort_start, Ort_ziel FROM Beziehung_Strecken WHERE Ort_start = 'Mannheim';
@@ -225,3 +321,311 @@ SELECT AngebotNr, Ort_start, Ort_ziel FROM Angebot WHERE Ort_start = 'Mannheim';
 SELECT Kunde.Name, Kunde.KundenNr, Beziehung_Vermittlung.AngebotNr, Beziehung_Vermittlung.GesuchNr, Beziehung_Auto_Kunde.Kennzeichen, Mitarbeiter.Name FROM Kunde, Beziehung_Vermittlung,Beziehung_Auto_kunde, Mitarbeiter
 WHERE (Kunde.KundenNr = Beziehung_Vermittlung.Fahrer AND Kunde.KundenNr = Beziehung_Auto_kunde.KundenNr AND Beziehung_Vermittlung.Vermittelt_Von = Mitarbeiter.PersonalNr)
 OR (Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Kunde.KundenNr = Beziehung_Auto_kunde.KundenNr AND Beziehung_Vermittlung.Vermittelt_Von = Mitarbeiter.PersonalNr);
+
+
+--Alle Strecken die nicht angeboten werden:
+SELECT Beziehung_Strecken.ort_start, Beziehung_Strecken.ort_ziel FROM Angebot, Beziehung_Strecken
+WHERE (Beziehung_Strecken.ort_start = Angebot.Ort_start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel) OR (Beziehung_Strecken.ort_start = Angebot.Ort_ziel AND Beziehung_Strecken.ort_ziel = Angebot.ort_Start);
+
+
+
+-- 1 Geben Sie alle Strecken aus die angeboten werden und wieviele plätze
+SELECT Ort_start, Ort_ziel FROM Angebot;
+
+SELECT a.angebotnr,a.ort_start "start/ueber" , a.ort_ziel "ziel",a.gebotene_plaetze FROM angebot a
+union
+SELECT a.angebotnr,a.ort_ueber "start/ueber", a.ort_ziel "ziel", a.gebotene_plaetze FROM angebot a
+WHERE a.ort_ueber IS NOT null;
+
+-- 2 geben sie alle Angebotene Strecken an , sowie die strecken welche "über-zielen" sind und die anzahl wie häufig diese strecke angeboten wird
+SELECT Count(*), start_ueber,ziel FROM (
+SELECT a.angebotnr,a.ort_start AS start_ueber , a.ort_ziel AS ziel,a.gebotene_plaetze FROM angebot a
+union
+SELECT a.angebotnr,a.ort_ueber as start_ueber, a.ort_ziel AS ziel, a.gebotene_plaetze FROM angebot a
+WHERE a.ort_ueber IS NOT NULL
+union
+SELECT a.angebotnr,a.ort_start as start_ueber, a.ort_ueber AS ziel, a.gebotene_plaetze FROM angebot a
+WHERE a.ort_ueber IS NOT NULL ) GROUP BY start_ueber,ziel;
+
+SELECT Angebot.ort_start AS "start", Angebot.ort_ziel AS "ziel" FROM Angebot
+UNION
+SELECT Angebot.ort_ueber AS "start", Angebot.ort_ziel AS "ziel" FROM Angebot
+WHERE Angebot.ort_ueber IS NOT NULL
+UNION
+SELECT Angebot.ort_start AS "start", Angebot.ort_ueber AS "ziel" FROM Angebot
+WHERE Angebot.ort_ueber IS NOT NULL;
+
+-- 3 geben sie alle teilstrecken aus die angeboten werden sowie die gesamtestrecke.
+SELECT a.angebotnr,a.ort_start AS start_ueber , a.ort_ziel AS ziel,a.gebotene_plaetze FROM angebot a
+union
+SELECT a.angebotnr,a.ort_ueber as start_ueber, a.ort_ziel AS ziel, a.gebotene_plaetze FROM angebot a
+WHERE a.ort_ueber IS NOT NULL
+union
+SELECT a.angebotnr,a.ort_start as start_ueber, a.ort_ueber AS ziel, a.gebotene_plaetze FROM angebot a
+WHERE a.ort_ueber IS NOT NULL  ;
+
+
+-- 4 Geben sie alle strecken aus die gesucht werden werden und wieviele plätze
+SELECT g.gesuchnr, g.ort_start "start",g.ort_ziel "ziel", g.Gesuchte_plaetze FROM gesuch g;
+
+-- 5 Geben sie alle angebote strecken an im zeitraum 01.06 bis  04.06 10:30 und deren plätze
+SELECT AngebotNr, Angebot.Ort_Start, Angebot.Ort_Ziel, abfahrt, fruehste_Startzeit, spaeteste_Startzeit FROM Angebot
+WHERE (Abfahrt > TO_DATE('01-06-15 00:00', 'DD-MM-YY HH24:MI') AND Abfahrt < TO_DATE('04-06-15 10:30', 'DD-MM-YY HH24:MI'))
+OR (fruehste_startzeit > TO_DATE('01-06-15 00:00', 'DD-MM-YY HH24:MI') AND fruehste_startzeit < TO_DATE('04-06-15 10:30', 'DD-MM-YY HH24:MI'))
+OR (spaeteste_startzeit > TO_DATE('01-06-15 00:00', 'DD-MM-YY HH24:MI') AND spaeteste_Startzeit < TO_DATE('04-06-15 10:30', 'DD-MM-YY HH24:MI'));
+
+-- 6 geben sie die anzahl aller fahrten von mannheim nach hannover die angeboten werden aus.
+SELECT Count(*) "Anzahl", Ort_start, Ort_ziel FROM Angebot
+WHERE (Ort_start = 'Mannheim' AND Ort_ziel = 'Hannover') OR (Ort_ueber = 'Mannheim' AND Ort_ziel = 'Hannover')
+GROUP BY Ort_start, Ort_ziel;
+
+-- 7 geben sie die namen, vornamen, adressen und die autos alle kunden aus, die an einer fahrt teilgenommen haben und noch nicht bezahlt
+@deprecated weil: bisschen dum hier das auto mit ins spiel zu bringen, die abfrage ist sinnlos sie wirft die mitfahrer ohne auto raus.
+SELECT Name, Vorname, Strasse, Gebuehr FROM Kunde, Beziehung_Vermittlung
+WHERE Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Beziehung_Vermittlung.Gebuehr = 'bezahlt';
+
+-- 10 geben sie die namen, vornamen, adressen von kunden aus die an einer fahrt teilgenommen haben und noch nicht bezahlt  .
+SELECT Name, Vorname, Strasse, Gebuehr FROM Kunde, Beziehung_Vermittlung
+WHERE Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Beziehung_Vermittlung.Gebuehr IS NULL;
+
+-- 11 geben sie an wieviele noch nicht bezahlt haben
+SELECT Count(*) "Anzahl nicht bezahlt" FROM Kunde, Beziehung_Vermittlung
+WHERE Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Beziehung_Vermittlung.Gebuehr IS NULL;
+
+-- 12 geben sie an wieviele bezahlt haben
+SELECT Count(*) "Anzahl bezahlt" FROM Kunde, Beziehung_Vermittlung
+WHERE Kunde.KundenNr = Beziehung_Vermittlung.Mitfahrer AND Beziehung_Vermittlung.Gebuehr = 'bezahlt';
+
+-- 13 geben sie an welche mitfahrer (kundennummer, name, vorname) bezahlt haben
+
+SELECT k.kundennr, k.name, k.vorname FROM beziehung_vermittlung bzv, kunde k
+WHERE bzv.gebuehr = 'bezahlt' AND k.kundennr = bzv.mitfahrer;
+
+
+-- 14 geben sie an wieviele km jeder kunde in seinen angeboten summiert anbietet
+
+SELECT Sum(s.km), k.kundennr FROM Beziehung_Strecken s, angebot a, kunde k
+WHERE a.bietender = k.kundennr
+AND a.ort_start = s.ort_start
+AND a.ort_ziel = s.ort_ziel
+GROUP BY k.kundennr;
+
+--Kürzeste Strecke eines Angebots:
+SELECT Min(Beziehung_strecken.km) "Min. Strecke" FROM Beziehung_Strecken, Angebot
+WHERE Beziehung_Strecken.ort_start = Angebot.Ort_Start AND Beziehung_Strecken.ort_ziel = Angebot.ort_ziel;
+
+
+
+-- 15 geben sie für jede strecke die namen , kundennr der kunden an, die für diese ein angebot oder gesuch haben, sortieren sie die strecke aufsteigend.
+SELECT * FROM
+(
+SELECT  a.ort_start, a.ort_ziel, k.kundennr AS kundennummer, k.name, k.vorname FROM kunde k, angebot a,gesuch g
+WHERE a.bietender = k.kundennr
+
+union
+SELECT  g.ort_start, g.ort_ziel, k.kundennr, k.name, k.vorname FROM kunde k, gesuch g
+WHERE g.suchender= k.kundennr
+)
+ORDER BY kundennummer ASC;
+
+
+-- 16 geben sie für jede strecke die anzahl der strecken/kunden an, die für diese ein angebot oder gesuch haben, sortieren sie die strecke aufsteigend
+
+SELECT star, ziel, Count(star) AS Anzahl FROM(
+SELECT bzs.ort_start AS star, bzs.ort_ziel AS ziel FROM beziehung_strecken bzs, angebot a
+WHERE bzs.ort_start = a.ort_start AND bzs.ort_ziel = a.ort_ziel
+OR bzs.ort_ziel = a.ort_start AND bzs.ort_start = a.ort_ziel
+
+UNION all
+
+SELECT bzs.ort_start AS star, bzs.ort_ziel AS ziel FROM beziehung_strecken bzs, angebot a
+WHERE a.ort_ueber = bzs.ort_start  AND a.ort_ziel  = bzs.ort_ziel
+OR a.ort_ueber = bzs.ort_ziel  AND a.ort_ziel  = bzs.ort_start
+OR a.ort_start = bzs.ort_start AND a.ort_ueber = bzs.ort_ziel
+OR a.ort_ziel = bzs.ort_start AND a.ort_ueber = bzs.ort_start
+
+union all
+
+SELECT bzs.ort_start AS star, bzs.ort_ziel AS ziel FROM beziehung_strecken bzs, gesuch g
+WHERE bzs.ort_start = g.ort_start AND bzs.ort_ziel = g.ort_ziel
+OR bzs.ort_ziel = g.ort_start AND bzs.ort_start = g.ort_ziel
+)
+GROUP BY star, ziel
+
+ORDER BY anzahl ASC;
+
+
+
+
+-- 17 vor und nach name der Kunden die ein Angebot haben das noch nicht zu einem gesuch vermittelt wurde, geordnet nach nachname
+
+
+SELECT * FROM(
+SELECT k.kundennr, k.vorname, k.name AS nachname FROM angebot a,kunde k
+WHERE  a.bietender = k.kundennr
+
+minus
+
+
+SELECT k.kundennr, k.vorname, k.name AS nachname FROM angebot a,kunde k, beziehung_vermittlung bzv
+WHERE  a.bietender = k.kundennr
+AND bzv.angebotnr = a.angebotnr
+
+) ORDER BY nachname DESC;
+
+
+--Alle Strecken der Angebote die auf Gesuche passen:
+SELECT DISTINCT Angebot.ort_start, Angebot.ort_ziel FROM Angebot, Gesuch
+WHERE (angebot.ort_start = gesuch.ort_start AND angebot.ort_ziel = gesuch.ort_ziel)
+OR (angebot.ort_ueber = gesuch.ort_start AND angebot.ort_ziel = gesuch.ort_ziel)
+OR (angebot.ort_start = gesuch.ort_start AND angebot.ort_ueber = gesuch.ort_ziel);
+
+
+
+-- 18 geben sie zu jedem ort den namen der kunden aus, die startort, zwischenhalt oder ziel im angebot dort hatten
+
+
+SELECT o.name, k.name FROM ort o, kunde k, angebot a
+WHERE k.kundennr = a.bietender
+AND
+(
+a.ort_start = o.name
+OR a.ort_ueber = o.name
+OR a.ort_ziel = o.name)
+ORDER BY o.name DESC;
+
+
+
+
+-- 19geben sie zu jedem ort die anzahl der kunden aus die startort, zwischenhalt oder ziel im angebot und die zahl dehrer die im gesuch dort waren
+
+SELECT ortsname, Sum(AnzahlKunden) FROM
+(
+SELECT o.name AS ortsname, Count(k.name) AS AnzahlKunden FROM ort o, kunde k, angebot a
+WHERE k.kundennr = a.bietender
+AND
+(
+a.ort_start = o.name
+OR a.ort_ueber = o.name
+OR a.ort_ziel = o.name)
+GROUP BY o.name
+
+UNION all
+
+SELECT o.name AS ortsname, Count(k.name) AS AnzahlKunden FROM ort o, kunde k, gesuch g
+WHERE k.kundennr = g.suchender
+AND
+(
+g.ort_start = o.name
+OR g.ort_ziel = o.name)
+GROUP BY o.name
+)
+GROUP BY ortsname;
+
+-- 20 zeigen sie die anzahl aller angebote an die auf gesuche von ihren orten her passen.
+
+SELECT a.ort_start, a.ort_ziel FROM angebot a
+ORDER BY ort_start;
+
+
+SELECT g.ort_start, g.ort_ziel FROM gesuch g
+ORDER BY ort_start;
+
+SELECT Count(g.gesuchnr), a.ort_start, a.ort_ziel FROM angebot a, gesuch g
+WHERE (a.ort_start = g.ort_start  AND a.ort_ziel = g.ort_ziel)
+OR    (a.ort_ueber = g.ort_start  AND a.ort_ziel = g.ort_ziel)
+OR    (a.ort_start = g.ort_start  AND a.ort_ueber = g.ort_ziel)
+GROUP BY g.gesuchnr, a.ort_start, a.ort_ziel ;
+
+
+-- selektiere alle die mit M anfangen
+
+SELECT k.vorname, k.name FROM kunde k
+WHERE k.name LIKE 'M%';
+
+-- selektiere alle strecken die mehr als 100 km isind
+
+SELECT bz.km, bz.ort_start, bz.ort_ziel FROM beziehung_strecken bz
+WHERE bz.km > 100;
+
+--SELECT Befehle fuer einzelne Tabellen:
+SELECT * FROM Mitarbeiter;
+SELECT * FROM Ort;
+SELECT * FROM Auto;
+SELECT * FROM Kunde;
+SELECT * FROM Gesuch;
+SELECT * FROM Angebot;
+SELECT * FROM Beziehung_Strecken;
+SELECT * FROM Beziehung_Vermittlung;
+SELECT * FROM Beziehung_Auto_Kunde;
+SELECT * FROM Parameter;
+
+--SELECT Namen Abfragen:--
+--Mit Wildcards
+SELECT Name FROM Kunde WHERE Name LIKE 'M%';
+ --Mit 1 Anfangsbuchstaben
+SELECT Name FROM Kunde WHERE REGEXP_LIKE(Name,'M');
+--Mit mehreren Anfangsbuchstaben z.B "M und K", ' wichtig!
+SELECT Name FROM Kunde WHERE REGEXP_LIKE(Name,'[MK]');
+
+--SELECT COUNT Abfragen:--
+--Anzahl der Angebote
+SELECT Count(AngebotNr) "Anzahl der Angebote" FROM Angebot;
+ --Anzahl der Angebote
+SELECT Count(GesuchNr) "Anzahl der Gesuche" FROM Gesuch;
+
+--SELECT ORDER BY Abfragen:
+--Angebote aufsteigend nach Startort sortieren:
+SELECT * FROM Angebot ORDER BY Ort_Start ASC;
+--Angebote absteigend nach Startort sortieren:
+SELECT * FROM Angebot ORDER BY Ort_Start DESC;
+
+--SELECT: "GROUP BY", gruppieren mit z.B  :
+SELECT Count(AngebotNr),Ort_Start FROM Angebot GROUP BY Ort_Start;
+SELECT Count(AngebotNr),Ort_Start FROM Angebot GROUP BY Ort_Start HAVING Ort_Start ='Mannheim' OR Ort_Start = 'Dortmund';
+SELECT * FROM Angebot WHERE Ort_Start = 'Mannheim' AND Abfahrt < TO_DATE('01-06-15 10:30', 'DD-MM-YY HH24:MI');
+
+--SELECT: Zeitvergleiche:
+SELECT * FROM Angebot WHERE Abfahrt > TO_DATE('01-06-15 10:30', 'DD-MM-YY HH24:MI');
+SELECT * FROM Angebot WHERE To_Char(Abfahrt,'HH24:MI') > '09:30';
+
+--SELECT: Startort und Über-Standorte abfragen:
+SELECT * FROM angebot WHERE ort_start='Mannheim' AND (ort_ziel='Koeln' OR ort_ueber='Koeln');
+SELECT Ort_Start,ort_ueber,ort_ziel FROM angebot WHERE ort_start='Mannheim' AND (ort_ziel='Koeln' OR ort_ueber='Koeln') ;
+
+--SELECT: Alle Angebote die von Mueller erfasst wurden anzeigen:
+SELECT * from angebot WHERE erfasst_von= (SELECT PersonalNr FROM mitarbeiter WHERE name='Mueller');
+
+SELECT AngebotNr FROM Angebot, Mitarbeiter WHERE Erfasst_von = mitarbeiter.personalnr AND mitarbeiter.name = 'Mueller';
+
+SELECT * FROM angebot WHERE  Abfahrt < TO_DATE( '1-6-15', 'DD-MM-YY') OR Fruehste_Startzeit < TO_DATE( '1-6-15', 'DD-MM-YY');
+SELECT * FROM angebot,gesuch WHERE angebot.ort_start = gesuch.ort_start AND angebot.ort_ziel = gesuch.ort_ziel;
+
+--SELECT: Alle durchgefuehrten fahrten // Alle durchgefuehrten Fahrten Beziehung_Vermittlung.Fahrt_duerchgefuehrt=1// Vermittelte Fahrten Beziehung_Vermittlung.Fahrt_duerchgefuehrt=0
+SELECT angebot.Ort_Start,angebot.ort_Ziel, angebot.Abfahrt, Beziehung_Vermittlung.Fahrt_durchgefuehrt FROM  angebot,Beziehung_Vermittlung
+WHERE Beziehung_Vermittlung.Fahrt_durchgefuehrt=1 AND angebot.Angebotnr = Beziehung_Vermittlung.AngebotNr;
+
+--SELECT: Alle Gesuche, mit der Distance > 100 KM:
+SELECT Gesuch.ort_start, Gesuch.ort_ziel,Beziehung_Strecken.km FROM Gesuch,Beziehung_Strecken
+WHERE Beziehung_Strecken.km>100 AND Beziehung_Strecken.ort_start = Gesuch.ort_start AND Beziehung_Strecken.ort_ziel = Gesuch.ort_ziel;
+
+--SELECT: Laenge einer bestimmten Strecke eines Angebotes nachfragen:
+SELECT Beziehung_Strecken.km "Laenge der Strecke", Angebot.Ort_Start, Angebot.Ort_Ziel FROM Angebot, Beziehung_Strecken
+WHERE Angebot.Ort_Start = 'Mannheim' AND Angebot.Ort_Ziel ='Muenchen' AND Beziehung_Strecken.Ort_Start = Angebot.Ort_Start
+AND Beziehung_Strecken.Ort_Ziel = Angebot.Ort_Ziel;
+
+--SELECT: Alle Fahrer:
+SELECT distinct kunde.name FROM Kunde, Angebot WHERE Kunde.KundenNr = Angebot.Bietender;
+
+--SELECT: Alle Fahrer die ein Auto besitzen:
+SELECT DISTINCT Kunde.name , kunde.vorname FROM Kunde, Beziehung_Auto_Kunde WHERE kunde.Kundennr = Beziehung_Auto_Kunde.kundennr ORDER BY name ASC;
+
+--SELECT: Auto-Modell über KundenNr abfragen:
+SELECT Kunde.KundenNr, Auto.Modell FROM Beziehung_Auto_Kunde, Kunde, Auto
+WHERE Kunde.KundenNr = Beziehung_Auto_Kunde.KundenNr AND Beziehung_Auto_Kunde.Kennzeichen = Auto.Kennzeichen;
+
+SELECT gesuch.ort_start,gesuch.ort_ziel,gesuch.gesuchnr FROM gesuch
+MINUS (
+SELECT gesuch.ort_start, gesuch.ort_ziel, gesuch.gesuchnr FROM angebot, gesuch
+WHERE gesuch.ort_Start = angebot.ort_start AND  gesuch.ort_ziel = angebot.ort_ziel OR gesuch.ort_Start = angebot.ort_ueber AND  gesuch.ort_ziel = angebot.ort_ziel )
+
